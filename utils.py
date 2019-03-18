@@ -157,48 +157,4 @@ def visualize(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected
         node2 = str(objects[obj_class_idx])+","+str(obj_idx)
         g.edge(node1,node2,label=predicates[int(rel[3])])
 
-#     objects_idx = {}
-
-#     # add nodes to graph
-#     nodes_to_add = set([])
-#     for idx,obj in enumerate(graphs['objs'][idx][:n_objs]):
-#         obj_score = obj[0]
-#         if obj_score > object_threshold:
-#             object_class_idx = int(obj[1])
-#             nodes_to_add.add(str(objects[object_class_idx])+","+str(idx))
-#             objects_idx[idx] = obj
-
-#     # add edges to graph
-#     rels = set([])
-#     edges_to_add = set([])
-#     connected_nodes = set([])
-#     for rel in graphs['rels'][idx][:n_rels]:
-#         if rel[0] > rel_threshold:
-#             sbj_idx = int(rel[1])
-#             obj_idx = int(rel[2])
-#             if sbj_idx in objects_idx and obj_idx in objects_idx:
-#                 if sbj_idx == obj_idx: # remove self loops
-#                     continue
-#                 sbj_class_idx = int(objects_idx[sbj_idx][1])
-#                 obj_class_idx = int(objects_idx[obj_idx][1])
-#                 o1 = objects[sbj_class_idx]
-#                 o2 = objects[obj_class_idx]
-#                 if not (sbj_class_idx,obj_class_idx) in rels:
-#                     node1 = str(o1)+","+str(sbj_idx)
-#                     node2 = str(o2)+","+str(obj_idx)
-#                     edges_to_add.add(((node1,node2),predicates[int(rel[3])]))
-#                     connected_nodes.add(node1)
-#                     connected_nodes.add(node2)
-#                     rels.add((sbj_class_idx,obj_class_idx))
-                    
-#     if only_connected:
-#         for node in list(connected_nodes):
-#             g.node(node)
-#     else:
-#         for node in list(nodes_to_add):
-#             g.node(node)
-        
-#     for ((node1,node2),label) in list(edges_to_add):
-#         g.edge(node1,node2,label=label)
-
     return g

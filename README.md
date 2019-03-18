@@ -10,9 +10,9 @@ Dependencies: cv2, matplotlib, scipy, json, urllib, h5py, graphviz (recommend in
 
 Data:
 
-Install COCO image metadata from [here](), and place in source directory.
+Install COCO image metadata from [here](https://drive.google.com/open?id=1xgrIh-kSTp9Z-ELDR445pAN4OK6OF63q), and place in source directory.
 
-Install pre-extracted scene-graph data from [here](), and place in exp/sg_results/ - about 7 GB.
+Install pre-extracted scene-graph data from [here](https://drive.google.com/open?id=1UZQydLanBXzTZv82tBNS7CQtqWgMaZmX), and place in exp/sg_results/ - about 4 GB.
 
 ## Usage
 

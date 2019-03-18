@@ -2,7 +2,7 @@
 
 Repo for extracting + visualizing scene-graphs on MS-COCO train+val 2014.
 
-Scene graphs are pre-extracted from the [px2graph repo](https://github.com/princeton-vl/px2graph) (SGGen task, with Faster R-CNN proposals from [here](https://www.mpi-inf.mpg.de/departments/computer-vision-and-multimodal-computing/research/object-recognition-and-scene-understanding/how-good-are-detection-proposals-really/)
+Scene graphs are pre-extracted from the [px2graph repo](https://github.com/princeton-vl/px2graph), with Faster R-CNN proposals from [here](https://www.mpi-inf.mpg.de/departments/computer-vision-and-multimodal-computing/research/object-recognition-and-scene-understanding/how-good-are-detection-proposals-really/)
 
 ## Setup
 

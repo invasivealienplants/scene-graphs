@@ -16,7 +16,7 @@ Download pre-extracted scene-graph data from [here](https://drive.google.com/ope
 
 ## Usage
 
-All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_matrix() returns objects and predicates matrices under pruning specification (e.g. score thresholds, removing isolated nodes), and visualize() displays bounding boxes on image + scene graph visualization (requires graphviz). **NOTE:** change graphviz path in utils.py (should appear if installed with conda)
+All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_matrix() returns objects and predicates matrices under pruning specification (e.g. score thresholds, removing isolated nodes), and visualize() displays bounding boxes on image + scene graph visualization (requires graphviz). **NOTE:** change graphviz path (example shown in notebook - path should appear if installed with conda)
 
 ## Example
 

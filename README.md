@@ -22,7 +22,12 @@ All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_
 
 Example image:
 
+![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/image.png)
+
 Corresponding graph (score threshold = 0.1, removed isolated nodes):
+
+![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/connected_graph.png)
 
 Corresponding graph, including isolated nodes:
 
+![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/extra_graph.png)

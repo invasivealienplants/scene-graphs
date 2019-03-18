@@ -1,8 +1,8 @@
 # scene-graphs
 
-Repo for extracting + visualizing scene-graphs on MS-COCO train+val 2014.
+Repo for extracting + visualizing scene-graphs on MS-COCO 2014.
 
-Scene graphs are pre-extracted from the [px2graph repo](https://github.com/princeton-vl/px2graph), with Faster R-CNN proposals from [here](https://www.mpi-inf.mpg.de/departments/computer-vision-and-multimodal-computing/research/object-recognition-and-scene-understanding/how-good-are-detection-proposals-really/)
+Scene graphs are pre-extracted from the [px2graph repo](https://github.com/princeton-vl/px2graph), using Faster R-CNN proposals from [here](https://www.mpi-inf.mpg.de/departments/computer-vision-and-multimodal-computing/research/object-recognition-and-scene-understanding/how-good-are-detection-proposals-really/)
 
 ## Setup
 
@@ -10,9 +10,9 @@ Dependencies: cv2, matplotlib, scipy, json, urllib, h5py, graphviz (recommend in
 
 Data:
 
-Install COCO image metadata from [here](https://drive.google.com/open?id=1xgrIh-kSTp9Z-ELDR445pAN4OK6OF63q), and place in source directory.
+Download COCO image metadata from [here](https://drive.google.com/open?id=1xgrIh-kSTp9Z-ELDR445pAN4OK6OF63q), and place in source directory.
 
-Install pre-extracted scene-graph data from [here](https://drive.google.com/open?id=1UZQydLanBXzTZv82tBNS7CQtqWgMaZmX), and place in exp/sg_results/ - about 4 GB.
+Download pre-extracted scene-graph data from [here](https://drive.google.com/open?id=1UZQydLanBXzTZv82tBNS7CQtqWgMaZmX), and place in exp/sg_results/ - about 4 GB.
 
 ## Usage
 

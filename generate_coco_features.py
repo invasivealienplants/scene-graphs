@@ -16,14 +16,14 @@ import torch.utils.model_zoo as model_zoo
 csv.field_size_limit(sys.maxsize)
 
 bboxes = h5py.File('/home/pp456/px2graph/exp/sg_results/coco_scenegraphs_px2graph.h5','r')
-coco_image_data = utils.get_image_data()
+coco_image_data = json.load(open('/home/pp456/px2graph/data/genome/driver/data/COCO/coco_image_data.json','r'))
 object_types = utils.get_object_types()
 predicate_types = utils.get_predicate_types()
 
 info = (coco_image_data,bboxes,object_types,predicate_types)
 
-trainfeaturefile = open('COCO_train_features.tsv','w+b')
-valfeaturefile = open('COCO_val_features.tsv','w+b')
+trainfeaturefile = open('/home/pp456/COCO/bu_features/COCO_train_features.tsv','w+b')
+valfeaturefile = open('/home/pp456/COCO/bu_features/COCO_val_features.tsv','w+b')
 
 FIELDNAMES = ['image_id', 'image_w','image_h','num_boxes', 'boxes', 'features']
 
@@ -55,10 +55,10 @@ for idx in range(len(coco_image_data)):
     region_features = []
     region_boxes = []
 
-    if idx % 100 == 0:
+    if idx % 10 == 0:
         print(idx)
 
-    image_id = coco_image_data[idx]['id']
+    image_id = coco_image_data[idx]['image_id']
 
     image_path = '/home/pp456/COCO/images/train2014/COCO_train2014_'+str(image_id).zfill(12)+'.jpg'
     train = True
@@ -88,7 +88,7 @@ for idx in range(len(coco_image_data)):
     objs,rels = utils.get_graph_matrix(idx, info, object_threshold=0.3, only_connected=True, nonmax_suppress=0.7)
 
     for obj in objs:
-        x0,y0,x1,y1 = obj[3:6]
+        x0,y0,x1,y1 = obj[3:]
         nx0,ny0 = int(float(x0)/w*imf_w),int(float(y0)/h*imf_h)
         nx1,ny1 = int(math.ceil(float(x1)/w*imf_w)),int(math.ceil(float(y1)/h*imf_h))
         region_crop = image_feature[:,:,ny0:ny1,nx0:nx1]
@@ -104,35 +104,24 @@ for idx in range(len(coco_image_data)):
         region_feature = region_feature.cpu().numpy()
 
         region_features.append(region_feature.flatten())
-        region_boxes.append(obj[3:6])
+        region_boxes.append(obj[3:])
 
     if skip:
         continue
 
-    item['features'] = base64.b64encode(region_features.reshape([-1]))
+    item['features'] = base64.b64encode(np.array(region_features).reshape([-1]))
     item['image_w'] = w
     item['image_h'] = h
     item['num_boxes'] = len(objs)
     item['image_id'] = image_id
-    item['boxes'] = base64.b64encoderegion_boxes.reshape([-1]))
+    item['boxes'] = base64.b64encode(np.array(region_boxes,dtype=np.float32).reshape([-1]))
     if train:
         trainwriter.writerow(item)
-        trainwriter.flush()
+        trainfeaturefile.flush()
     else:
         valwriter.writerow(item)
-        valwriter.flush()
+        valfeaturefile.flush()
 
-trainwriter.close()
-valwriter.close()
-
-
-
-    
-
-
-
-
-
-
-
+trainfeaturefile.close()
+valfeaturefile.close()
 

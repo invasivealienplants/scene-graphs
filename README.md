@@ -22,7 +22,7 @@ All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_
 
 Example image:
 
-![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/image.png)
+![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/nonmax.png)
 
 Corresponding graph (score threshold = 0.1, removed isolated nodes):
 

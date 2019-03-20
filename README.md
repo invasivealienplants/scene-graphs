@@ -16,15 +16,15 @@ Download pre-extracted scene-graph data from [here](https://drive.google.com/ope
 
 ## Usage
 
-All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_matrix() returns objects and predicates matrices under pruning specification (e.g. score thresholds, removing isolated nodes), and visualize() displays bounding boxes on image + scene graph visualization (requires graphviz). **NOTE:** change graphviz path (example shown in notebook - path should appear if installed with conda)
+All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_matrix() returns objects and predicates matrices under pruning specification (e.g. score thresholds, removing isolated nodes, non-max suppression), and visualize() displays bounding boxes on image + scene graph visualization (requires graphviz). **NOTE:** change graphviz path (example shown in notebook - path should appear if installed with conda)
 
 ## Example
 
-Example image:
+Example image (with non-max suppression):
 
 ![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/nonmax.png)
 
-Corresponding graph (score threshold = 0.1, removed isolated nodes):
+Example graph (score threshold = 0.1, removed isolated nodes):
 
 ![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/connected_graph.png)
 

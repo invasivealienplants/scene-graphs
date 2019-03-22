@@ -16,7 +16,7 @@ import torch.utils.model_zoo as model_zoo
 csv.field_size_limit(sys.maxsize)
 
 bboxes = h5py.File('/home/pp456/px2graph/exp/sg_results/coco_scenegraphs_px2graph.h5','r')
-coco_image_data = utils.get_image_data()
+coco_image_data = json.load(open('/home/pp456/data/genome/driver/data/COCO/coco_image_data.json','r'))
 object_types = utils.get_object_types()
 predicate_types = utils.get_predicate_types()
 
@@ -58,7 +58,7 @@ for idx in range(len(coco_image_data)):
     if idx % 100 == 0:
         print(idx)
 
-    image_id = coco_image_data[idx]['id']
+    image_id = coco_image_data[bboxes['idx'][idx]]['image_id']
 
     image_path = '/home/pp456/COCO/images/train2014/COCO_train2014_'+str(image_id).zfill(12)+'.jpg'
     train = True
@@ -77,7 +77,7 @@ for idx in range(len(coco_image_data)):
     else:
         nh,nw = int(float(h)*600/w),600
 
-    image = cv2.resize(image,(nh,nw))
+    image = cv2.resize(image,(nw,nh))
     image = torch.FloatTensor(image).reshape(1,nh,nw,3).permute(0,3,1,2)
     image = image.cuda()
  
@@ -96,8 +96,10 @@ for idx in range(len(coco_image_data)):
             skip = True
             break 
 
-        region_resize = F.adaptive_max_pool2d(region_crop,(7,7)) # adaptive max pool
-        region_feature = resnet.avgpool(region_resize)
+        # region_resize = F.adaptive_max_pool2d(region_crop,(7,7)) # adaptive max pool
+        # region_feature = resnet.avgpool(region_resize)
+        region_feature = torch.mean(region_crop,dim=-1) # mean pool
+        region_feature = torch.mean(region_feature,dim=-1)
         region_feature = region_feature.view(-1)
         
         region_feature = region_feature.detach()

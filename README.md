@@ -20,7 +20,7 @@ All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_
 
 ## Example
 
-Example image (with non-max suppression):
+Example image:
 
 ![alt text](https://github.com/invasivealienplants/scene-graphs/blob/master/sample_images/nonmax.png)
 

@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import scipy.misc as misc
 import json
-import urllib.request
+try:
+    from urllib.request import urlretrieve
+except:
+    print("cannot import urllib")
 import h5py
 from graphviz import Digraph
 
@@ -158,7 +161,7 @@ def visualize(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected
 
     image = image_data[graphs['idx'][idx]]
 
-    urllib.request.urlretrieve(image['url'],"sample_images/" + image['url'].split("/")[-1])
+    urlretrieve(image['url'],"sample_images/" + image['url'].split("/")[-1])
     im = misc.imread("sample_images/" + image['url'].split("/")[-1])
 
     fig,ax = plt.subplots(figsize=(int(im.shape[0]/50),int(im.shape[1]/50)))

@@ -4,10 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import scipy.misc as misc
 import json
-try:
-    from urllib.request import urlretrieve
-except:
-    print("cannot import urllib")
+import urllib.request
 import h5py
 from graphviz import Digraph
 
@@ -35,6 +32,7 @@ def get_iou(bb1, bb2):
     calculates IOU, bbs have format [x0,y0,x1,y1]
     """
 
+    # determine the coordinates of the intersection rectangle
     x_left = max(bb1[0], bb2[0])
     y_top = max(bb1[1], bb2[1])
     x_right = min(bb1[2], bb2[2])
@@ -43,16 +41,23 @@ def get_iou(bb1, bb2):
     if x_right < x_left or y_bottom < y_top:
         return 0.0
 
+    # The intersection of two axis-aligned bounding boxes is always an
+    # axis-aligned bounding box
     intersection_area = (x_right - x_left) * (y_bottom - y_top)
+
+    # compute the area of both AABBs
     bb1_area = (bb1[2] - bb1[0]) * (bb1[3] - bb1[1])
     bb2_area = (bb2[2] - bb2[0]) * (bb2[3] - bb2[1])
 
+    # compute the intersection over union by taking the intersection
+    # area and dividing it by the sum of prediction + ground-truth
+    # areas - the interesection area
     iou = intersection_area / float(bb1_area + bb2_area - intersection_area)
     assert iou >= 0.0
     assert iou <= 1.0
     return iou
 
-def get_graph_matrix(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected=False, nonmax_suppress=1.0):
+def get_graph_matrix(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected=False, nonmax_suppress=1.0, top_k=None):
     
     '''
     Returns tuple (objs, rels) for image image_data[idx] according to pruning specifications
@@ -79,6 +84,8 @@ def get_graph_matrix(idx, info, object_threshold=0.3, rel_threshold=0.0, only_co
         else includes isolated nodes
     nonmax_suppress : determines cutoff IoU for non-max suppression : 
         if two boxes have IoU > nonmax_suppress, only keeps box with higher confidence score
+        
+    top_k : if None, follows criteria above, else takes top_k boxes
     '''
     
     image_data,graphs,objects,predicates = info
@@ -97,20 +104,26 @@ def get_graph_matrix(idx, info, object_threshold=0.3, rel_threshold=0.0, only_co
     rels = rels[order]
     
     # add nodes to graph
-    objects_idx = set([])
-    past_bboxs = [] # for non max suppression
-    for idx,obj in enumerate(objs):
-        obj_score = obj[0]
-        skip = False
-        for bbox in past_bboxs:
-            if get_iou(bbox,obj[3:]) > nonmax_suppress:
-                skip = True
-        if skip:
-            continue
-        if obj_score > object_threshold:
-            object_class_idx = int(obj[1])
+    if top_k == None:
+        objects_idx = set([])
+        past_bboxs = [] # for non max suppression
+        for idx,obj in enumerate(objs):
+            obj_score = obj[0]
+            skip = False
+            for bbox in past_bboxs:
+                if get_iou(bbox,obj[3:]) > nonmax_suppress:
+                    skip = True
+            if skip:
+                continue
+            if obj_score > object_threshold:
+                object_class_idx = int(obj[1])
+                objects_idx.add(idx)
+                past_bboxs.append(obj[3:])
+    else:
+        print(top_k)
+        objects_idx = set([])
+        for idx in range(top_k):
             objects_idx.add(idx)
-            past_bboxs.append(obj[3:])
 
     # add edges to graph
     edges_to_add = set([])
@@ -132,7 +145,7 @@ def get_graph_matrix(idx, info, object_threshold=0.3, rel_threshold=0.0, only_co
     object_map = {}
     included_objects = []
     included_rels = []
-    if only_connected:
+    if only_connected and top_k == None:
         use_objects = connected_nodes
     else:
         use_objects = objects_idx
@@ -155,13 +168,13 @@ def get_graph_matrix(idx, info, object_threshold=0.3, rel_threshold=0.0, only_co
 # no self loops, multi-edges
 # object, rel thresholds determine what score cutoff to use in pruning
 # currently NOT pruning nodes without edges
-def visualize(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected=False, nonmax_suppress=1.0):
+def visualize(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected=False, nonmax_suppress=1.0, top_k=None):
     
     image_data,graphs,objects,predicates = info
 
     image = image_data[graphs['idx'][idx]]
 
-    urlretrieve(image['url'],"sample_images/" + image['url'].split("/")[-1])
+    urllib.request.urlretrieve(image['url'],"sample_images/" + image['url'].split("/")[-1])
     im = misc.imread("sample_images/" + image['url'].split("/")[-1])
 
     fig,ax = plt.subplots(figsize=(int(im.shape[0]/50),int(im.shape[1]/50)))
@@ -169,7 +182,7 @@ def visualize(idx, info, object_threshold=0.3, rel_threshold=0.0, only_connected
     h,w = im.shape[0],im.shape[1]
     ax.imshow(im)
     
-    objs,rels = get_graph_matrix(idx,info,object_threshold,rel_threshold,only_connected,nonmax_suppress)
+    objs,rels = get_graph_matrix(idx,info,object_threshold,rel_threshold,only_connected,nonmax_suppress,top_k)
     
     for object_instance in objs:
         rect = patches.Rectangle((int(object_instance[3]),int(object_instance[4])),int(object_instance[5]-object_instance[3]),int(object_instance[6]-object_instance[4]),linewidth=2,edgecolor='r',facecolor='none')

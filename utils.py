@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import scipy.misc as misc
 import json
-import urllib.request
+try:
+    from urllib.request import urlretrieve
+except:
+    print("cannot import urllib")
 import h5py
 from graphviz import Digraph
 

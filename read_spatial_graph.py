@@ -16,5 +16,5 @@ num_boxes = example_graph['num_boxes'] # number of boxes in graph
 num_edges = example_graph['num_edges'] # number of edges in graph
 boxes = np.frombuffer(base64.decodestring(example_graph['boxes']),dtype=np.float32).reshape([int(num_boxes),-1])
 # each row in boxes is [x0,y0,x1,y1]
-edges = np.frombuffer(base64.decodestring(example_graph['edges']),dtype=np.float32).reshape([int(num_edges),-1])
+edges = np.frombuffer(base64.decodestring(example_graph['edges']),dtype=np.int16).reshape([int(num_edges),-1])
 # each row in edges is [i,j,label] : corresponding to edge (boxes[i],boxes[j],label)

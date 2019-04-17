@@ -14,6 +14,8 @@ Download COCO image metadata from [here](https://drive.google.com/open?id=1xgrIh
 
 Download pre-extracted scene-graph data from [here](https://drive.google.com/open?id=1UZQydLanBXzTZv82tBNS7CQtqWgMaZmX), and place in exp/sg_results/ - about 4 GB.
 
+Spatial graphs for COCO: with threshold [0.5](https://drive.google.com/file/d/1gUSRK8j2iysiZwC6NYG0H-A7FW5mQQCU/view?usp=sharing) (978 edges on avg), with threshold [0.25](https://drive.google.com/file/d/1DUgVJwWwKNLGYbiZwpWFdbcsrF1e9DhS/view?usp=sharing) (490 edges on avg)
+
 ## Usage
 
 All functions are in util.py, a demo is in visualize.ipynb. Functions get_graph_matrix() returns objects and predicates matrices under pruning specification (e.g. score thresholds, removing isolated nodes, non-max suppression), and visualize() displays bounding boxes on image + scene graph visualization (requires graphviz). **NOTE:** change graphviz path (example shown in notebook - path should appear if installed with conda)
